@@ -20,7 +20,7 @@ CRGB leds[NUM_LEDS];
 
 typedef uint8_t (*SimplePattern)();
 typedef SimplePattern SimplePatternList[];
-typedef struct { SimplePattern drawFrame;  char name[32]; } PatternAndName;
+typedef struct { SimplePattern drawFrame;  String name; } PatternAndName;
 typedef PatternAndName PatternAndNameList[];
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
@@ -48,7 +48,7 @@ const PatternAndNameList patterns = {
 int brightness = 32;
 int patternCount = ARRAY_SIZE(patterns);
 int patternIndex = 0;
-char patternName[32] = "Pride";
+String patternName = "Pride";
 int power = 1;
 char variableValue[32] = "";
 
@@ -102,27 +102,27 @@ void setup() {
     // load settings from EEPROM
     brightness = EEPROM.read(0);
     if(brightness < 1)
-        brightness = 1;
+      brightness = 1;
     else if(brightness > 255)
-        brightness = 255;
+      brightness = 255;
 
     FastLED.setBrightness(brightness);
     FastLED.setDither(brightness < 255);
 
     patternIndex = EEPROM.read(1);
     if(patternIndex < 0)
-        patternIndex = 0;
+      patternIndex = 0;
     else if (patternIndex >= patternCount)
-        patternIndex = patternCount - 1;
+      patternIndex = patternCount - 1;
 
     r = EEPROM.read(2);
     g = EEPROM.read(3);
     b = EEPROM.read(4);
 
     if(r == 0 && g == 0 && b == 0) {
-        r = 0;
-        g = 0;
-        b = 255;
+      r = 0;
+      g = 0;
+      b = 255;
     }
 
     solidColor = CRGB(r, b, g);
@@ -132,12 +132,12 @@ void setup() {
     Particle.function("variable", setVariable); // sets the value of a variable, args are name:value
     Particle.function("varCursor", moveVariableCursor);
 
-    Particle.variable("power", &power, INT);
-    Particle.variable("brightness", &brightness, INT);
-    Particle.variable("patternCount", &patternCount, INT);
-    Particle.variable("patternIndex", &patternIndex, INT);
-    Particle.variable("patternName", patternName, STRING);
-    Particle.variable("variable", variableValue, STRING);
+    Particle.variable("power", power);
+    Particle.variable("brightness", brightness);
+    Particle.variable("patternCount", patternCount);
+    Particle.variable("patternIndex", patternIndex);
+    Particle.variable("patternName", patternName);
+    Particle.variable("variable", variableValue);
 }
 
 void loop() {
@@ -165,9 +165,9 @@ void loop() {
 
     // slowly change to a new palette
     EVERY_N_SECONDS(SECONDS_PER_PALETTE) {
-        paletteIndex++;
-        if (paletteIndex >= paletteCount) paletteIndex = 0;
-        targetPalette = palettes[paletteIndex];
+      paletteIndex++;
+      if (paletteIndex >= paletteCount) paletteIndex = 0;
+      targetPalette = palettes[paletteIndex];
     };
 }
 
@@ -288,7 +288,7 @@ int movePatternNameCursor(String args)
     else if (index >= patternCount)
         index = patternCount - 1;
 
-    strcpy(patternName, patterns[index].name);
+    patternName = patterns[index].name;
 
     return index;
 }

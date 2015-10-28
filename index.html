@@ -2,14 +2,14 @@
 <html ng-app="app" ng-csp="">
 <head>
   <meta charset="UTF-8">
-  <title>Fibonacci Lamp</title>
+  <title>Jewelry Tree</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body ng-controller="MainCtrl">
   <div class="container">
-    <h1>Fibonacci Lamp</h1>
+    <h1>Jewelry Tree</h1>
 
     <form class="form-horizontal" role="form">
 
@@ -46,16 +46,24 @@
 
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-9">
-          <button class="btn" id="btnPower" ng-click="togglePower()" ng-disabled="busy || disconnected">
-            <span class="glyphicon glyphicon-off"></span>
-          </button>
+          <div class="btn-group" role="group" aria-label="Power">
+            <button type="button" class="btn btn-default" id="btnPowerOn" ng-click="powerOn()" ng-disabled="busy || disconnected">
+              On
+            </button>
+            <button type="button" class="btn btn-default" id="btnPowerOff" ng-click="powerOff()" ng-disabled="busy || disconnected">
+              Off
+            </button>
+          </div>
         </div>
       </div>
 
       <div class="form-group">
         <label for="inputBrightness" class="col-sm-2 control-label">Brightness</label>
-        <div class="input-group col-sm-6">
-          <input ng-model="brightness" class="form-control" id="inputBrightness" type="number" min="0" max="255" ng-disabled="busy || disconnected" />
+        <div class="col-sm-1">
+          <p ng-bind="brightness" class="form-control-static"></p>
+        </div>
+        <div class="input-group col-sm-5">
+          <input ng-model="brightness" class="form-control" id="inputBrightness" type="range" step="1" min="2" max="255" ng-disabled="busy || disconnected" />
           <span class="input-group-btn">
             <button class="btn" id="btnSetBrightness" ng-click="setBrightness()" ng-disabled="busy || disconnected">Set</button>
           </span>
@@ -78,36 +86,6 @@
           <input type="color" ng-model="color" class="form-control" id="inputColor" ng-disabled="busy || disconnected" />
           <span class="input-group-btn">
             <button class="btn" id="btnSetColor" ng-click="setColor()" ng-disabled="busy || disconnected">Set</button>
-          </span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="inputR" class="col-sm-2 control-label">Red</label>
-        <div class="input-group col-sm-6">
-          <input ng-model="r" class="form-control" id="inputR" type="number" min="0" max="255" ng-disabled="busy || disconnected" />
-          <span class="input-group-btn">
-            <button class="btn" id="btnSetR" ng-click="setR()" ng-disabled="busy || disconnected">Set</button>
-          </span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="inputG" class="col-sm-2 control-label">Green</label>
-        <div class="input-group col-sm-6">
-          <input ng-model="g" class="form-control" id="inputG" type="number" min="0" max="255" ng-disabled="busy || disconnected" />
-          <span class="input-group-btn">
-            <button class="btn" id="btnSetG" ng-click="setG()" ng-disabled="busy || disconnected">Set</button>
-          </span>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="inputB" class="col-sm-2 control-label">Blue</label>
-        <div class="input-group col-sm-6">
-          <input ng-model="b" class="form-control" id="inputB" type="number" min="0" max="255" ng-disabled="busy || disconnected" />
-          <span class="input-group-btn">
-            <button class="btn" id="btnSetG" ng-click="setB()" ng-disabled="busy || disconnected">Set</button>
           </span>
         </div>
       </div>
