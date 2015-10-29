@@ -11,7 +11,7 @@ app.config(function ($httpProvider) {
 });
 
 app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, variableService) {
-  $scope.brightness = "";
+  $scope.brightness = "255";
   $scope.busy = false;
   $scope.power = 1;
   $scope.color = "#0000ff"
@@ -28,6 +28,15 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
 
   $scope.devices = [];
 
+  $scope.onSelectedDeviceChange = function() {
+    var devicePatterns = localStorage["deviceId" + $scope.device.id + "patterns"];
+
+    if(devicePatterns === undefined)
+      $scope.patterns = null;
+    else
+      $scope.patterns = JSON.parse(devicePatterns);
+  }
+
   $scope.getDevices = function () {
     $scope.status = 'Getting devices...';
 
@@ -41,7 +50,7 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
               for (var i = 0; i < data.length; i++) {
                 if (data[i].id == deviceId) {
                   $scope.device = data[i];
-                  $scope.patterns = JSON.parse(localStorage["deviceId" + $scope.device.id + "patterns"]);
+                  $scope.onSelectedDeviceChange();
                   break;
                 }
               }
@@ -118,7 +127,10 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
     })
 
     .then(function (data) {
-      $scope.getPatterns();
+      if($scope.patterns === undefined)
+        $scope.getPatterns();
+      else
+        $scope.getPatternIndex();
     });
   }
 
