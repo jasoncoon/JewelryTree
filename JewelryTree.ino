@@ -544,7 +544,7 @@ void colorwaves( CRGB* ledarray, uint16_t numleds, CRGBPalette16& palette)
   static uint16_t sLastMillis = 0;
   static uint16_t sHue16 = 0;
 
-  uint8_t sat8 = beatsin88( 87, 220, 250);
+  // uint8_t sat8 = beatsin88( 87, 220, 250);
   uint8_t brightdepth = beatsin88( 341, 96, 224);
   uint16_t brightnessthetainc16 = beatsin88( 203, (25 * 256), (40 * 256));
   uint8_t msmultiplier = beatsin88(147, 23, 60);
