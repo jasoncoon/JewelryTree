@@ -91,7 +91,7 @@ CRGBPalette16 targetPalette = palettes[paletteIndex];
 
 void setup() {
     FastLED.addLeds<WS2811, TX>(leds, NUM_LEDS);
-    /*FastLED.setCorrection(Typical8mmPixel);*/
+    FastLED.setCorrection(Typical8mmPixel);
     FastLED.setBrightness(brightness);
     FastLED.setDither(false);
     fill_solid(leds, NUM_LEDS, solidColor);

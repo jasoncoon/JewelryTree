@@ -147,26 +147,6 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
       });
   };
 
-  $scope.togglePower = function () {
-    // $scope.busy = true;
-    var newPower = $scope.power == 0 ? 1 : 0;
-    $http({
-      method: 'POST',
-      url: 'https://api.particle.io/v1/devices/' + $scope.device.id + '/variable',
-      data: { access_token: $scope.accessToken, args: "pwr:" + newPower },
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    }).
-    success(function (data, status, headers, config) {
-      $scope.busy = false;
-      $scope.power = data.return_value;
-      $scope.status = $scope.power == 1 ? 'Turned on' : 'Turned off';
-    }).
-    error(function (data, status, headers, config) {
-      $scope.busy = false;
-      $scope.status = data.error_description;
-    });
-  };
-
   $scope.powerOn = function () {
     // $scope.busy = true;
     $http({
