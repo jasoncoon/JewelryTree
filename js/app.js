@@ -22,6 +22,7 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
   $scope.status = "Please enter your access token.";
   $scope.disconnected = false;
   $scope.accessToken = "";
+  $scope.isDeviceSelected = false;
 
   $scope.patterns = [];
   $scope.patternIndex = 0;
@@ -29,6 +30,8 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
   $scope.devices = [];
 
   $scope.onSelectedDeviceChange = function() {
+    $scope.isDeviceSelected = $scope.device != null;
+
     var devicePatterns = localStorage["deviceId" + $scope.device.id + "patterns"];
 
     if(devicePatterns === undefined)
@@ -42,23 +45,30 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
 
     $http.get('https://api.particle.io/v1/devices?access_token=' + $scope.accessToken).
       success(function (data, status, headers, config) {
-        $scope.devices = data;
         if (data && data.length > 0) {
+          var deviceId = null;
+
           if (Modernizr.localstorage) {
-            var deviceId = localStorage["deviceId"];
-            if (deviceId) {
-              for (var i = 0; i < data.length; i++) {
-                if (data[i].id == deviceId) {
-                  $scope.device = data[i];
-                  $scope.onSelectedDeviceChange();
-                  break;
-                }
-              }
+            deviceId = localStorage["deviceId"];
+          }
+
+          for (var i = 0; i < data.length; i++) {
+            var device = data[i];
+            device.title = (device.connected == true ? "● " : "◌ ") + device.name;
+            device.status = device.connected == true ? "online" : "offline";
+
+            if (data[i].id == deviceId) {
+              $scope.device = data[i];
+              $scope.onSelectedDeviceChange();
             }
           }
 
+          $scope.devices = data;
+
           if (!$scope.device)
             $scope.device = data[0];
+
+          $scope.isDeviceSelected = $scope.device != null;
         }
         $scope.status = 'Loaded devices';
       }).
@@ -81,6 +91,8 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
   $scope.save = function () {
     localStorage["accessToken"] = $scope.accessToken;
     $scope.status = "Saved access token.";
+
+    $scope.getDevices();
   }
 
   $scope.connect = function () {
