@@ -40,6 +40,14 @@ app.controller('MainCtrl', function ($scope, $http, $timeout, patternService, va
       $scope.patterns = JSON.parse(devicePatterns);
   }
 
+  $scope.onSelectedPatternChange = function() {
+    $scope.setPattern();
+  }
+
+  $scope.onSelectedColorChange = function() {
+    $scope.setColor();
+  }
+
   $scope.getDevices = function () {
     $scope.status = 'Getting devices...';
 
